@@ -25,9 +25,9 @@ print('ROWS:', len(df))
 print('TOTAL REVENUE:', round(total_revenue, 2))
 print('TOTAL PROFIT:', round(total_profit, 2))
 print('PROFIT MARGIN (%):', profit_margin)
-print('\\nREVENUE BY CATEGORY')
+print('\nREVENUE BY CATEGORY')
 print(df.groupby('category', as_index=False)['revenue'].sum().sort_values('revenue', ascending=False).to_string(index=False))
-print('\\nREVENUE BY REGION')
+print('\nREVENUE BY REGION')
 print(df.groupby('region', as_index=False)['revenue'].sum().sort_values('revenue', ascending=False).to_string(index=False))
 
 if plt is not None:
@@ -45,9 +45,9 @@ if plt is not None:
     plt.savefig(OUT / 'revenue_by_category.png', dpi=160)
     plt.close()
 else:
-    print('\\nCharts skipped: install dependencies from requirements.txt to generate PNG visualizations.')
+    print('\nCharts skipped: install dependencies from requirements.txt to generate PNG visualizations.')
 
-print('\\nRECOMMENDATIONS')
+print('\nRECOMMENDATIONS')
 print('- Prioritize Furniture and Technology bundles because they produce higher-value orders.')
 print('- Review low-margin products and negotiate supplier costs where possible.')
 print('- Use monthly trend monitoring to identify periods requiring promotional support.')
