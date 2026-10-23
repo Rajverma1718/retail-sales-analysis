@@ -17,13 +17,17 @@ df['cost'] = df['quantity'] * df['unit_cost']
 df['profit'] = df['revenue'] - df['cost']
 df['month'] = df['order_date'].dt.to_period('M').astype(str)
 
+total_revenue = df['revenue'].sum()
+total_profit = df['profit'].sum()
+profit_margin = round(total_profit / total_revenue * 100, 2) if total_revenue else 'N/A'
+
 print('ROWS:', len(df))
-print('TOTAL REVENUE:', round(df['revenue'].sum(), 2))
-print('TOTAL PROFIT:', round(df['profit'].sum(), 2))
-print('PROFIT MARGIN (%):', round(df['profit'].sum() / df['revenue'].sum() * 100, 2))
-print('\nREVENUE BY CATEGORY')
+print('TOTAL REVENUE:', round(total_revenue, 2))
+print('TOTAL PROFIT:', round(total_profit, 2))
+print('PROFIT MARGIN (%):', profit_margin)
+print('\\nREVENUE BY CATEGORY')
 print(df.groupby('category', as_index=False)['revenue'].sum().sort_values('revenue', ascending=False).to_string(index=False))
-print('\nREVENUE BY REGION')
+print('\\nREVENUE BY REGION')
 print(df.groupby('region', as_index=False)['revenue'].sum().sort_values('revenue', ascending=False).to_string(index=False))
 
 if plt is not None:
@@ -41,9 +45,9 @@ if plt is not None:
     plt.savefig(OUT / 'revenue_by_category.png', dpi=160)
     plt.close()
 else:
-    print('\nCharts skipped: install dependencies from requirements.txt to generate PNG visualizations.')
+    print('\\nCharts skipped: install dependencies from requirements.txt to generate PNG visualizations.')
 
-print('\nRECOMMENDATIONS')
+print('\\nRECOMMENDATIONS')
 print('- Prioritize Furniture and Technology bundles because they produce higher-value orders.')
 print('- Review low-margin products and negotiate supplier costs where possible.')
 print('- Use monthly trend monitoring to identify periods requiring promotional support.')
