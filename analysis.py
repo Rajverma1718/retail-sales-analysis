@@ -10,7 +10,16 @@ DATA = ROOT / 'data' / 'sales.csv'
 OUT = ROOT / 'outputs'
 OUT.mkdir(exist_ok=True)
 
-df = pd.read_csv(DATA, parse_dates=['order_date'])
+df = pd.read_csv(DATA)
+required_columns = {
+    'order_date', 'category', 'region', 'quantity', 'unit_price', 'unit_cost',
+}
+missing_columns = required_columns.difference(df.columns)
+if missing_columns:
+    missing = ', '.join(sorted(missing_columns))
+    raise SystemExit(f'Missing required columns in {DATA}: {missing}')
+
+df['order_date'] = pd.to_datetime(df['order_date'])
 df = df.drop_duplicates().copy()
 df['revenue'] = df['quantity'] * df['unit_price']
 df['cost'] = df['quantity'] * df['unit_cost']
