@@ -19,7 +19,11 @@ if missing_columns:
     missing = ', '.join(sorted(missing_columns))
     raise SystemExit(f'Missing required columns in {DATA}: {missing}')
 
-df['order_date'] = pd.to_datetime(df['order_date'])
+df['order_date'] = pd.to_datetime(df['order_date'], errors='coerce')
+invalid_dates = df['order_date'].isna()
+if invalid_dates.any():
+    csv_rows = ', '.join(str(index + 2) for index in df.index[invalid_dates])
+    raise SystemExit(f'Invalid order_date values in {DATA} at CSV row(s): {csv_rows}')
 df = df.drop_duplicates().copy()
 df['revenue'] = df['quantity'] * df['unit_price']
 df['cost'] = df['quantity'] * df['unit_cost']
