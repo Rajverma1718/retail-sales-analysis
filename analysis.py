@@ -19,6 +19,14 @@ if missing_columns:
     missing = ', '.join(sorted(missing_columns))
     raise SystemExit(f'Missing required columns in {DATA}: {missing}')
 
+for column in ('quantity', 'unit_price', 'unit_cost'):
+    numeric_values = pd.to_numeric(df[column], errors='coerce')
+    invalid_values = numeric_values.isna()
+    if invalid_values.any():
+        csv_rows = ', '.join(str(index + 2) for index in df.index[invalid_values])
+        raise SystemExit(f'Invalid {column} values in {DATA} at CSV row(s): {csv_rows}')
+    df[column] = numeric_values
+
 df['order_date'] = pd.to_datetime(df['order_date'], errors='coerce')
 invalid_dates = df['order_date'].isna()
 if invalid_dates.any():
